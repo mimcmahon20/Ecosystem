@@ -237,7 +237,8 @@ class Boid {
     // }
     noStroke();
 
-    ambientMaterial(map(this.hunger, 0, 1, 0, 255),map(this.hunger, 0,1,255,0),0,125);
+
+    ambientMaterial(map(this.hunger, 0, 1, 0, 255),map(this.hunger, 0,1,255,0),0);
     scale(0.15);
     model(rabbitModel);
     

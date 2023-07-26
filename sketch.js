@@ -12,8 +12,8 @@ let numAlive = 0;
 let numAliveP;
 let debugMode = false;
 let checkboxDebug;
-let numBunniesGlobal = 50;
-let numWolvesGlobal = 10;
+let numBunniesGlobal = 80;
+let numWolvesGlobal = 6;
 
 let xOffset = 0;
 let zOffset = 0;
@@ -54,9 +54,9 @@ function draw() {
 
 
   //3D setup
-  pointLight(0,0,0,255,255,255);
-  pointLight(200, 200, 200, -mouseX + width/2, -mouseY+height/2, 500);
-    //ambientLight(155, 155, 155);
+  //pointLight(200, 200, 200, -mouseX + width/2, -mouseY+height/2, 500);
+  ambientLight(155, 155, 155);
+  
   //translate(0,0,-mouseY*2+650);
 
   //rotateX(PI / 3);
@@ -242,7 +242,7 @@ function draw() {
   }); //end of forEach bunny
 
   for (let i = wolves.length - 1; i >= 0; i--) {
-    if (wolves[i].hunger >= 1) {
+    if (wolves[i].hunger >= 2) {
       wolves.splice(i, 1);
     }
   }
@@ -277,6 +277,13 @@ function draw() {
     }
     foodPiles[numFoodPiles].draw();
   }
+  //ambientMaterial(5,105,55);
+  ambientMaterial(244,164,96)
+  ambientLight(255,255,255);
+  translate(0,0,-2);
+  noStroke();
+  plane(width,height);
+  //box(width, height, 162);
   pop();
 
   //post draw logic, check if all bunnies are dead, if so, add 4 new bunnies
@@ -316,4 +323,5 @@ function draw() {
   if (frameCount % 5 == 0) {
     foodPiles.push(new Food());
   }
+  
 }

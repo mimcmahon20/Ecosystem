@@ -217,11 +217,11 @@ class Wolf {
     rotateX(PI / 2);
     rotateY(this.vel.heading());
     noStroke();
-    fill(255,0,0,10);
-    noFill();
+    // fill(255,0,0,10);
+     //noFill();
 
 
-    ambientMaterial(255,255,255);
+    ambientMaterial(215,215,215);
     scale(0.15);
     model(wolfModel);
     //ambientMaterial(255,0,0,155);
