@@ -13,7 +13,7 @@ class Boid {
     //DNA[2] == perception
     this.perception = this.DNA.genes[2] * 100;
     //DNA[3] == hungerRate
-    this.hungerRate = this.DNA.genes[3] * 0.0065;
+    this.hungerRate = this.DNA.genes[3] * 0.0025;
     //DNA[4] = eatingTime 
     this.eatingTime = this.DNA.genes[4] * 100;
     //DNA[5] = matingTime
@@ -26,7 +26,9 @@ class Boid {
 
     //kinematics / speed of obj
     this.index = ind;
-    this.pos = new createVector(random(-100, 100), random(-100, 100));
+    let randx = floor(random(-width/2 + 25, width/2 - 25));
+    let randy = floor(random(-height/2 + 25,height/2 - 25));
+    this.pos = createVector(randx,randy);
     this.vel = new createVector(
       random(-1, 1) * this.maxSpeed,
       random(-1, 1) * this.maxSpeed
@@ -48,6 +50,10 @@ class Boid {
     //this.matingTime = 100;
     this.matingRate = 0; //0 to 1, > matingWeight
     this.haveBaby = false;
+
+    //prey mechanic 
+    this.beingEaten = false;
+    this.fleeing = false;
   }
 
   //runs for every bunny, first checks if active to apply movement, if not active then it increments the inactiveCount
@@ -100,6 +106,13 @@ class Boid {
     }
   }
 
+  eat() {
+    this.active = false;
+    this.isEating = true;
+    this.hunger = 0;
+    this.hungry = false;
+  }
+
   updateDNA() {
     //DNA structure
     //0 to 1 for all genes, scale to actual values based on gene
@@ -138,6 +151,20 @@ class Boid {
     return closest;
   }
 
+  findClosestWolf(list) {
+    let minDist = Infinity;
+    let closest;
+    list.forEach((item) => {
+      let d = dist(this.pos.x, this.pos.y, item.pos.x, item.pos.y);
+      if (d < minDist && d < this.perception) {
+        minDist = d;
+        closest = item;
+      }
+    });
+    return closest;
+  }
+
+
   findMate(list) {
     let minDist = Infinity;
     let closest;
@@ -163,6 +190,16 @@ class Boid {
     this.vel.mag(this.maxSpeed);
   }
 
+  flee(pos) {
+    let desiredVelocity = p5.Vector.sub(this.pos, pos);
+    desiredVelocity.setMag(this.maxSpeed);
+
+    let steer = p5.Vector.sub(desiredVelocity, this.vel);
+    steer.limit(this.maxForce);
+
+    this.applyForce(-steer);
+  }
+
   draw() {
     const angle = this.vel.heading() + PI / 2;
     push();
@@ -177,8 +214,6 @@ class Boid {
       fill(map(this.maxSpeed, 0, 4, 255, 0),map(this.maxSpeed, 0,4,0,255),0,125);
 
       rect(-10,15,5,speedHeight);
-
-
     }
 
     rotate(angle);
