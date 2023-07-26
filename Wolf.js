@@ -214,16 +214,24 @@ class Wolf {
   draw() {
     push();
     translate(this.pos.x, this.pos.y);
-    rotate(this.vel.heading() + PI / 2);
+    rotateX(PI / 2);
+    rotateY(this.vel.heading());
     noStroke();
-    fill(255,0,0,10);
-    ellipse(0,0,this.perception * 2);
-    fill(225,255,185,185);
-    beginShape();
-    vertex(0, -this.r * 2);
-    vertex(-this.r, this.r * 2);
-    vertex(this.r, this.r * 2);
-    endShape(CLOSE);
+    // fill(255,0,0,10);
+     //noFill();
+
+
+    ambientMaterial(215,215,215);
+    scale(0.15);
+    model(wolfModel);
+    //ambientMaterial(255,0,0,155);
+    // ellipse(0,0,this.perception * 2);
+    // fill(225,255,185,185);
+    // beginShape();
+    // vertex(0, -this.r * 2);
+    // vertex(-this.r, this.r * 2);
+    // vertex(this.r, this.r * 2);
+    // endShape(CLOSE);
     pop();
   }
 }

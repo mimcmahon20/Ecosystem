@@ -205,42 +205,48 @@ class Boid {
     push();
     translate(this.pos.x, this.pos.y);
 
-    if(this.debugMode){ 
-      let forceHeight = map(this.maxForce, 0, 0.2, 0, -100);
-      fill(map(this.maxForce, 0, 0.2, 255,0),map(this.maxForce, 0,0.2,0,255),0,125);
-      rect(10,15,5,forceHeight);
+    //2D DEBUG MODE
+    // if(this.debugMode){ 
+    //   let forceHeight = map(this.maxForce, 0, 0.2, 0, -100);
+    //   fill(map(this.maxForce, 0, 0.2, 255,0),map(this.maxForce, 0,0.2,0,255),0,125);
+    //   rect(10,15,5,forceHeight);
       
-      let speedHeight = map(this.maxSpeed, 0, 4, 0, -100);
-      fill(map(this.maxSpeed, 0, 4, 255, 0),map(this.maxSpeed, 0,4,0,255),0,125);
+    //   let speedHeight = map(this.maxSpeed, 0, 4, 0, -100);
+    //   fill(map(this.maxSpeed, 0, 4, 255, 0),map(this.maxSpeed, 0,4,0,255),0,125);
 
-      rect(-10,15,5,speedHeight);
-    }
-
-    rotate(angle);
+    //   rect(-10,15,5,speedHeight);
+    // }
+    rotateX(PI / 2)
+    rotateY(angle);
     if (this.debugMode) {
       noFill();
       stroke(0, 125, 0, 125);
       ellipse(0, 0, floor(this.perception * 2));
     }
 
-    //COLOR/DEBUG MODE: 
-    
-    if(this.debugMode){
-      fill(map(this.hunger, 0, 1, 0, 255),map(this.hunger, 0,1,255,0),0,125);
+    //2D COLOR/DEBUG MODE: 
+    // if(this.debugMode){
+    //   fill(map(this.hunger, 0, 1, 0, 255),map(this.hunger, 0,1,255,0),0,125);
   
-      if(this.willMate) {
-        stroke(255,0,255);
-      } else {
-        stroke(0,0,0);
-      }
-      strokeWeight(1);
-    }
+    //   if(this.willMate) {
+    //     stroke(255,0,255);
+    //   } else {
+    //     stroke(0,0,0);
+    //   }
+    //   strokeWeight(1);
+    // }
+    noStroke();
 
-    beginShape();
-    vertex(0, -this.r * 2);
-    vertex(-this.r, this.r * 2);
-    vertex(this.r, this.r * 2);
-    endShape(CLOSE);
+
+    ambientMaterial(map(this.hunger, 0, 1, 0, 255),map(this.hunger, 0,1,255,0),0);
+    scale(0.15);
+    model(rabbitModel);
+    
+    // beginShape();
+    // vertex(0, -this.r * 2);
+    // vertex(-this.r, this.r * 2);
+    // vertex(this.r, this.r * 2);
+    // endShape(CLOSE);
     pop();
   }
 

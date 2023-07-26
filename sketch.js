@@ -12,13 +12,21 @@ let numAlive = 0;
 let numAliveP;
 let debugMode = false;
 let checkboxDebug;
-let numBunniesGlobal = 50;
-let numWolvesGlobal = 10;
+let numBunniesGlobal = 80;
+let numWolvesGlobal = 6;
+
+let xOffset = 0;
+let zOffset = 0;
+
+function preload() {
+  rabbitModel = loadModel('rabbit.obj');
+  wolfModel = loadModel('wolf.obj');
+}
 
 function setup() {
   height = 1500;
   width = 1500;
-  createCanvas(width, height);
+  createCanvas(width, height, WEBGL);
   for (let numBunnies = 0; numBunnies < numBunniesGlobal; numBunnies++) {
     aliveBunnies.push(new Boid(numBunnies));
     bunnies.push(new Boid(numBunnies));
@@ -33,14 +41,45 @@ function setup() {
 
   frameRate(60);
   numAliveP = createP("numalive");
-  checkboxDebug = createCheckbox("Debug Mode Bunnies <br/>Pink border: canMate<br/>Color: Hunger<br/>LeftColumn: maxSpeed <br/>RightColumn: maxForce", false);
+  checkboxDebug = createCheckbox(
+    "Debug Mode Bunnies <br/>Pink border: canMate<br/>Color: Hunger<br/>LeftColumn: maxSpeed <br/>RightColumn: maxForce",
+    false
+  );
 }
 
 function draw() {
   push();
-  translate(width / 2, height / 2);
-  background(220);
+  //2D setup
+  //translate(width / 2, height / 2, 0);
 
+
+  //3D setup
+  //pointLight(200, 200, 200, -mouseX + width/2, -mouseY+height/2, 500);
+  ambientLight(155, 155, 155);
+  
+  //translate(0,0,-mouseY*2+650);
+
+  //rotateX(PI / 3);
+  //rotateZ(mouseX / 100);
+
+
+  if (keyIsDown(LEFT_ARROW)) {
+    xOffset+= 10;
+  } else if (keyIsDown(RIGHT_ARROW)) {
+    xOffset-= 10;
+  } else if (keyIsDown(UP_ARROW)) {
+    zOffset+= 10;
+
+  } else if (keyIsDown(DOWN_ARROW)) {
+    zOffset-= 10;
+  }
+
+  rotateX(xOffset * .001);
+  translate(-mouseX + width/2,-mouseY + height/2,zOffset);
+
+  background(220, 220, 220, 150);
+
+  fill(0, 0, 0, 255);
   //Loops through all wolves, finds
   //1st target if hungry, closest bunny in perception
   //2nd mate if not hungry and matingRate > hungerRate
@@ -203,7 +242,7 @@ function draw() {
   }); //end of forEach bunny
 
   for (let i = wolves.length - 1; i >= 0; i--) {
-    if (wolves[i].hunger >= 1) {
+    if (wolves[i].hunger >= 2) {
       wolves.splice(i, 1);
     }
   }
@@ -212,10 +251,10 @@ function draw() {
     wolves[i].index = i;
   }
 
-  wolves.forEach(wolf => {
+  wolves.forEach((wolf) => {
     wolf.update();
     wolf.draw();
-  })
+  });
 
   aliveBunnies.forEach((bunny) => {
     bunny.update();
@@ -238,6 +277,13 @@ function draw() {
     }
     foodPiles[numFoodPiles].draw();
   }
+  //ambientMaterial(5,105,55);
+  ambientMaterial(244,164,96)
+  ambientLight(255,255,255);
+  translate(0,0,-2);
+  noStroke();
+  plane(width,height);
+  //box(width, height, 162);
   pop();
 
   //post draw logic, check if all bunnies are dead, if so, add 4 new bunnies
@@ -262,9 +308,20 @@ function draw() {
     generationBunnies++;
   }
   numAliveP.html(
-    "Time: " + floor(frameCount / 60) + "<br/>Number of Bunnies: " + aliveBunnies.length + "<br/> Number of Wolves: " + wolves.length + "<br/> Generation: " + generationBunnies + "<br/>Number of Food Piles: " + foodPiles.length + "<br/>"
+    "Time: " +
+      floor(frameCount / 60) +
+      "<br/>Number of Bunnies: " +
+      aliveBunnies.length +
+      "<br/> Number of Wolves: " +
+      wolves.length +
+      "<br/> Generation: " +
+      generationBunnies +
+      "<br/>Number of Food Piles: " +
+      foodPiles.length +
+      "<br/>"
   );
   if (frameCount % 5 == 0) {
     foodPiles.push(new Food());
   }
+  
 }

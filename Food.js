@@ -10,12 +10,19 @@ class Food {
   
   draw() {
     push();
-    stroke(0,255,0);
+    //2D draw
+    stroke(0,0,0);
     strokeWeight(10);
     if(this.beingEaten){
       stroke(255,0,255);
     }
     point(this.pos.x, this.pos.y);
+    
+  //3D draw
+    // ambientMaterial(0,255,0);
+    // ambientLight(255,255,255);
+    // translate(this.pos.x, this.pos.y, 0);
+    // sphere(5);
     pop();
   }
 
